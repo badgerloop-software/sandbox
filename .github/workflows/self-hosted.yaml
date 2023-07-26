@@ -11,7 +11,7 @@ jobs:
     steps:
      - name: Echo
        run: |
-         echo "This is run locally"
+         echo "This is run locally" > newfile
          echo "Workspace: ${{ github.workspace }}"
          echo "Tag name from GITHUB_REF_NAME: $GITHUB_REF_NAME"
          echo "Tag name from github.ref_name: ${{  github.ref_name }}"
