@@ -6,7 +6,7 @@ on:
       - 'main'
   push:
     branches:
-      - 'test-wf'
+      - 'test-wfs'
 
 jobs:
   self-hosted-test:

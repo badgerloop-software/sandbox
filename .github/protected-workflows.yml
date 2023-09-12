@@ -1,6 +1,6 @@
 events:
   pull_request:
-    - trustOrgMembers: true
+    - trustCollaborators: true
       paths:
         disallowed:
           - ".github/**"
@@ -15,5 +15,4 @@ events:
 anyEvent:
   trustAnyone: false
   trustCollaborators: false
-  trustOrgMembers: false
   trustedUserNames: []
