@@ -3,7 +3,10 @@ events:
     - trustOrgMembers: true
       paths:
       	disallowed:
-          - ".github/protected-workflows.yml" # <-- Exteremly important. Only certain users should be able to change this file.
+		  - ".github/**"
+          - ".github/protected-workflows.yml" # <-- Extremely important. Only certain users should be able to change this file.
+    - trustedUserNames:
+	    - "jrvollmer"
 
 # Addition
 
