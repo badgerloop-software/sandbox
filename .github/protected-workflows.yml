@@ -1,0 +1,14 @@
+events:
+  pull_request:
+    - trustOrgMembers: true
+      paths:
+      	disallowed:
+          - ".github/protected-workflows.yml" # <-- Exteremly important. Only certain users should be able to change this file.
+
+# Prevent workflows from running on any event other than pull requests.
+# Although this rule is automatically included, it is added here to prevent confusion.
+anyEvent:
+  trustAnyone: false
+  trustCollaborators: false
+  trustOrgMembers: false
+  trustedUserNames: []
