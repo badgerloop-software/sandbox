@@ -1,4 +1,4 @@
-name: test-self-hosted-2
+name: test-self-hosted
 
 on:
   pull_request:
