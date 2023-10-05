@@ -15,3 +15,24 @@ jobs:
        run: |
          echo "Tag name from GITHUB_REF_NAME: $GITHUB_REF_NAME"
          echo "Tag name from github.ref_name: ${{  github.ref_name }}"
+
+     - name: Checkout Repo
+       uses: actions/checkout@v3
+
+     - name: Upload Test Artifact
+       uses: actions/upload-artifact@v3
+       with:
+         name: test-artifact
+         path: hello-world.sh
+
+     - name: Upload Test Artifact 2
+       uses: actions/upload-artifact@v3
+       with:
+         name: test-artifact2
+         path: hello-world.sh
+
+     - name: Upload Test Artifact 3
+       uses: actions/upload-artifact@v3
+       with:
+         name: test-artifact3
+         path: hello-world.sh
