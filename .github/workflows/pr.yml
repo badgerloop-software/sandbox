@@ -1,4 +1,4 @@
-name: B
+name: PR
 
 on:
   pull_request:
@@ -7,9 +7,13 @@ on:
     types: [opened, synchronize, reopened, edited]
 
 jobs:
-  github-example-branches:
+  github-hosted-job:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+
+    outputs:
+      artifact-name: ${{ steps.ls-artifacts.outputs.foo-out }}
+
     steps:
      - name: Get PR Info
        run: |
@@ -18,12 +22,14 @@ jobs:
          echo "Head.label: ${{ github.event.pull_request.head.label }}"
 
      - name: List Artifacts
+       id: ls-artifacts
        run: |
          curl -L \
               -H "Accept: application/vnd.github+json" \
               -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
               -H "X-GitHub-Api-Version: 2022-11-28" \
               https://api.github.com/repos/badgerloop-software/sandbox/actions/artifacts?name=test-artifact
+              echo "foo-out=bar" >> $GITHUB_OUTPUT
 
      - name: Get Artifact
        run: |
@@ -33,21 +39,22 @@ jobs:
               -H "X-GitHub-Api-Version: 2022-11-28" \
               https://api.github.com/repos/badgerloop-software/sandbox/actions/artifacts/967408877/zip
          ls -l
-         curl -LO \
-              -H "Accept: application/vnd.github+json" \
-              -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-              -H "X-GitHub-Api-Version: 2022-11-28" \
-              https://api.github.com/repos/badgerloop-software/sandbox/actions/artifacts/967408877
-         ls -l
-         cat 9*
-         cat zip
          unzip zip
          ls -l
 
+     - name: Upload Artifact
+       uses: actions/upload-artifact@v3
+       with:
+         name: pr-artifact
+         path: hello-world.sh
+
   self-hosted-job:
     runs-on: self-hosted
+
+    needs: github-hosted-job
+
     steps:
-     - name: Show PR Info
+     - name: Show PR/Misc Info
        run: |
          echo "Title: ${{ github.event.pull_request.title }}"
          echo "Body: ${{ github.event.pull_request.body }}"
@@ -67,3 +74,14 @@ jobs:
               -H "X-GitHub-Api-Version: 2022-11-28" \
               https://api.github.com/repos/badgerloop-software/sandbox/actions/artifacts/967408877/zip
          ls -l
+
+     - name: Show Output from GitHub Hosted Job
+       run: echo "${{ needs.github-hosted-job.outputs.artifact-name }}"
+
+     - name: Download GitHub Hosted Job Artifact
+       uses: actions/download-artifact@v3
+       with:
+         name: pr-artifact
+
+     - name: Show Downloaded Artifact
+       run: ls -l
